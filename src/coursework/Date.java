@@ -44,6 +44,7 @@ public class Date {
         return this.year;
     }
     
+    @Override
     public String toString() {
         return "Date [ day = " + this.day + ", month = " + this.month + ", year = " + this.year + "]";
     }
@@ -55,5 +56,16 @@ public class Date {
         else {
             return this.day + "/" + this.month + "/" + this.year;
         }
+    }
+    
+    public boolean withinRange(Date date1, Date date2) {
+	if (year >= date1.getYear() && year <= date2.getYear()) {
+	    if (month >= date1.getMonth() && month <= date2.getMonth()) {
+		if (day >= date1.getDay() && day <= date2.getDay()) {
+		    return true;
+		}
+	    }
+	}
+	return false;
     }
 }
