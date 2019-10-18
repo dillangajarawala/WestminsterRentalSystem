@@ -13,6 +13,8 @@ import java.util.ArrayList;
  */
 public interface RentalVehicleManager {
     
+    public abstract void launchMenu();
+    
     public abstract void addVehicle(Vehicle vehicleToAdd);
     
     public abstract void deleteVehicle(String plateNumber);
