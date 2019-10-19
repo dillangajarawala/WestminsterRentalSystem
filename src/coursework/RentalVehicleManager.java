@@ -13,8 +13,6 @@ import java.util.ArrayList;
  */
 public interface RentalVehicleManager {
     
-    public abstract void launchMenu();
-    
     public abstract void addVehicle(Vehicle vehicleToAdd);
     
     public abstract void deleteVehicle(String plateNumber);
@@ -23,11 +21,13 @@ public interface RentalVehicleManager {
     
     public abstract void saveVehicleList();
     
-    public abstract void launchGUI();
-    
     public abstract ArrayList<Vehicle> filterVehicles(String param, String value);
     
     public abstract boolean checkAvailability(String plateNumber, Date start, Date end);
     
     public abstract void bookVehicle(String plateNumber, Date pickUpDate, Date dropOffDate);
+    
+    public abstract void launchGUI();
+    
+    public abstract void launchMenu();
 }
