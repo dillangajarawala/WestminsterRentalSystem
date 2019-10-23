@@ -15,7 +15,12 @@ public class RentalSystem {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        WestminsterRentalVehicleManager sys = new WestminsterRentalVehicleManager();
+        boolean exit = false;
+        
+        while (!exit) {
+            exit = sys.launchMenu();
+        }
     }
     
 }

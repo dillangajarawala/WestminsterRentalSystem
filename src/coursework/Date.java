@@ -68,4 +68,35 @@ public class Date {
 	}
 	return false;
     }
+    
+    public boolean greaterThan(Date comparison) {
+	if (year > comparison.getYear()) {
+	    return true;
+	} else if (year == comparison.getYear() && month > comparison.getMonth()) {
+	    return true;
+	} else if (year == comparison.getYear() && month == comparison.getMonth() && day > comparison.getDay()) {
+	    return true;
+	}
+	return false;
+    }
+    
+    public boolean lessThan(Date comparison) {
+	if (year < comparison.getYear()) {
+	    return true;
+	} else if (year == comparison.getYear() && month < comparison.getMonth()) {
+	    return true;
+	} else if (year == comparison.getYear() && month == comparison.getMonth() && day < comparison.getDay()) {
+	    return true;
+	}
+	return false;
+    }
+    
+    public static boolean overlap(Date start1, Date end1, Date start2, Date end2) {
+	if (start2.withinRange(start1, end1) || end2.withinRange(start1, end1)) {
+	    return true;
+	} else if (start2.lessThan(start1) && end2.greaterThan(end1)) {
+	    return true;
+	}
+	return false;
+    }
 }

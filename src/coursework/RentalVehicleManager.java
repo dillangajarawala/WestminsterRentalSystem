@@ -29,5 +29,5 @@ public interface RentalVehicleManager {
     
     public abstract void launchGUI();
     
-    public abstract void launchMenu();
+    public abstract boolean launchMenu();
 }
