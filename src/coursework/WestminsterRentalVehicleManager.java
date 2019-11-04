@@ -49,16 +49,11 @@ public class WestminsterRentalVehicleManager implements RentalVehicleManager {
 
     @Override
     public void printVehicles() {
-	ArrayList<String> makes = new ArrayList<>();
-	Map<String, Integer> makeToIndex = new HashMap<>();
-	for (int i = 0; i < vehiclesToRent.size(); i++) {
-	    makes.add(vehiclesToRent.get(i).getMake());
-	    makeToIndex.put(vehiclesToRent.get(i).getMake(), i);
-	}
-	Collections.sort(makes, String.CASE_INSENSITIVE_ORDER);
-	Vehicle v;
-	for (String make: makes) {
-	    v = vehiclesToRent.get(makeToIndex.get(make));
+	System.out.println();
+	System.out.println("VEHICLE LIST:");
+	ArrayList<Vehicle> sortedVehicles = this.vehiclesToRent;
+	Collections.sort(sortedVehicles);
+	for (Vehicle v: sortedVehicles) {
 	    System.out.println(v);
 	}
     }
@@ -170,7 +165,6 @@ public class WestminsterRentalVehicleManager implements RentalVehicleManager {
 			addVehicle(c);
 			break;
 		    case 2:
-			System.out.println(plateNumber + " " + make + " " + colour);
 			Motorbike m = new Motorbike(plateNumber, make, colour);
 			addVehicle(m);
 			break;	

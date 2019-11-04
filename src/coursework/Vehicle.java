@@ -9,7 +9,7 @@ package coursework;
  *
  * @author Dillan
  */
-public abstract class Vehicle {
+public abstract class Vehicle implements Comparable<Vehicle> {
     protected String plateNumber;
     protected String make;
     protected String colour;
@@ -54,6 +54,11 @@ public abstract class Vehicle {
     @Override
     public String toString() {
 	return getVehicleType() + " with plate " + getPlateNumber() + ", make " + getMake() + ", and colour " + getColour() + ".";
+    }
+
+    @Override
+    public int compareTo(Vehicle v) {
+	return this.getMake().compareTo(v.getMake());
     }
     
     
