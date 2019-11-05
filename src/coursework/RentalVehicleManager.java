@@ -5,6 +5,7 @@
  */
 package coursework;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -19,7 +20,7 @@ public interface RentalVehicleManager {
     
     public abstract void printVehicles();
     
-    public abstract void saveVehicleList();
+    public abstract void saveVehicleList() throws IOException;
     
     public abstract ArrayList<Vehicle> filterVehicles(String param, String value);
     

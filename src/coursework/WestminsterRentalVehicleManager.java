@@ -5,7 +5,11 @@
  */
 package coursework;
 
+import java.io.IOException;
 import java.util.*;
+import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -59,8 +63,12 @@ public class WestminsterRentalVehicleManager implements RentalVehicleManager {
     }
 
     @Override
-    public void saveVehicleList() {
-	throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void saveVehicleList() throws IOException {
+	PrintWriter writer = new PrintWriter("vehicles.txt");
+	for (Vehicle v : this.vehiclesToRent) {
+	    writer.println(v.toString());
+	}
+	writer.close();
     }
 
     @Override
@@ -79,7 +87,7 @@ public class WestminsterRentalVehicleManager implements RentalVehicleManager {
 		    if (v.getMake().equals(value)) {
 			filtered.add(v);
 		    }
-		} 
+		}
 	}
 	return filtered;
     }
@@ -154,18 +162,25 @@ public class WestminsterRentalVehicleManager implements RentalVehicleManager {
 		
 		switch(vehicleType) {
 		    case 1:
-			Map<Integer, String> types = new HashMap<>();
-			types.put(1, "SUV");
-			types.put(2, "Sedan");
-			types.put(3, "Minivan");
+			Map<Integer, String> carTypes = new HashMap<>();
+			carTypes.put(1, "SUV");
+			carTypes.put(2, "Sedan");
+			carTypes.put(3, "Minivan");
 			System.out.println("Enter 1 for SUV, 2 for Sedan, or 3 for Minivan.");
-			int type = s.nextInt();
+			int carType = s.nextInt();
 			s.nextLine();
-			Car c = new Car(plateNumber, make, types.get(type), colour);
+			Car c = new Car(plateNumber, make, carTypes.get(carType), colour);
 			addVehicle(c);
 			break;
 		    case 2:
-			Motorbike m = new Motorbike(plateNumber, make, colour);
+			Map<Integer, String> bikeTypes = new HashMap<>();
+			bikeTypes.put(1, "Moped");
+			bikeTypes.put(2, "Dirt Bike");
+			bikeTypes.put(3, "Cruiser");
+			System.out.println("Enter 1 for Moped, 2 for Dirt Bike, or 3 for Cruiser.");
+			int bikeType = s.nextInt();
+			s.nextLine();
+			Motorbike m = new Motorbike(plateNumber, make, bikeTypes.get(bikeType), colour);
 			addVehicle(m);
 			break;	
 		}
@@ -186,7 +201,11 @@ public class WestminsterRentalVehicleManager implements RentalVehicleManager {
 		break;
 		
 	    case 4:
+	    try {
 		saveVehicleList();
+	    } catch (IOException ex) {
+		Logger.getLogger(WestminsterRentalVehicleManager.class.getName()).log(Level.SEVERE, null, ex);
+	    }
 		System.out.println();
 		break;
 		
