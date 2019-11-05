@@ -15,12 +15,11 @@ public class Car extends Vehicle{
     public Car(String plateNumber, String make) {
 	super(plateNumber, make);
 	colour = "black";
-	type = "sedan";
+	type = "Sedan";
     }
     
     public Car(String plateNumber, String make, String type) {
-	super(plateNumber, make);
-	colour = "black";
+	super(plateNumber, make, "black");
 	this.type = type;
     }
     

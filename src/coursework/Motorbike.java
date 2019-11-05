@@ -10,14 +10,30 @@ package coursework;
  * @author Dillan
  */
 public class Motorbike extends Vehicle {
+    private String type;
     
     public Motorbike(String plateNumber, String make) {
 	super(plateNumber, make);
 	colour = "black";
+	this.type = "moped";
     }
     
-    public Motorbike(String plateNumber, String make, String colour) {
+    public Motorbike(String plateNumber, String make, String type) {
+	super(plateNumber, make, "black");
+	this.type = type;
+    }
+    
+    public Motorbike(String plateNumber, String make, String type, String colour) {
 	super(plateNumber, make, colour);
+	this.type = type;
+    }
+    
+    public String getType() {
+	return this.type;
+    }
+    
+    public void setType(String type) {
+	this.type = type;
     }
 
     @Override
