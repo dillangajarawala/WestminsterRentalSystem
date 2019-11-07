@@ -5,11 +5,11 @@
  */
 package coursework;
 
-import java.io.IOException;
+import java.awt.BorderLayout;
+import java.io.*;
 import java.util.*;
-import java.io.PrintWriter;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.*;
+import javax.swing.*;
 
 /**
  *
@@ -126,7 +126,11 @@ public class WestminsterRentalVehicleManager implements RentalVehicleManager {
 
     @Override
     public void launchGUI() {
-	throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	RentalGUI test = new RentalGUI(this.vehiclesToRent);
+	test.setSize(1000, 500);
+	test.setVisible(true);
+	test.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+	
     }
 
     @Override
@@ -215,6 +219,10 @@ public class WestminsterRentalVehicleManager implements RentalVehicleManager {
 		
 	    case 6:
 		exit = true;
+		break;
+		
+	    default:
+		System.out.println("Please enter valid input.");
 		break;
 	}
 	return exit;

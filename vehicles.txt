@@ -1,2 +1,3 @@
-Motorbike with plate HI, make Suzuki, and colour black.
-Car of type Sedan with plate BLOW, make Ferrari, and colour red.
+Car of type null with plate TEST123, make Ferrari, and colour black.
+Motorbike with plate FASTBOY, make Suzuki, and colour green.
+Car of type null with plate ELECTRICSLIDE, make Tesla, and colour red.
