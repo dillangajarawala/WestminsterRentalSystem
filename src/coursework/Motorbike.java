@@ -19,21 +19,11 @@ public class Motorbike extends Vehicle {
     }
     
     public Motorbike(String plateNumber, String make, String type) {
-	super(plateNumber, make, "black");
-	this.type = type;
+	super(plateNumber, make, type, "black");
     }
     
     public Motorbike(String plateNumber, String make, String type, String colour) {
-	super(plateNumber, make, colour);
-	this.type = type;
-    }
-    
-    public String getType() {
-	return this.type;
-    }
-    
-    public void setType(String type) {
-	this.type = type;
+	super(plateNumber, make, type, colour);
     }
 
     @Override

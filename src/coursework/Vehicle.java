@@ -13,15 +13,23 @@ public abstract class Vehicle implements Comparable<Vehicle> {
     protected String plateNumber;
     protected String make;
     protected String colour;
+    protected String type;
     
     public Vehicle(String plateNumber, String make) {
         this.plateNumber = plateNumber;
 	this.make = make;
     }
     
-    public Vehicle(String plateNumber, String make, String colour) {
+    public Vehicle(String plateNumber, String make, String type) {
+	this.plateNumber = plateNumber;
+	this.make = make;
+	this.type = type;
+    }
+    
+    public Vehicle(String plateNumber, String make, String type, String colour) {
         this.plateNumber = plateNumber;
 	this.make = make;
+	this.type = type;
 	this.colour = colour;
     }
     
@@ -47,6 +55,14 @@ public abstract class Vehicle implements Comparable<Vehicle> {
     
     public String getColour() {
 	return this.colour;
+    }
+    
+    public String getType() {
+	return this.type;
+    }
+    
+    public void setType(String type) {
+	this.type = type;
     }
     
     public abstract String getVehicleType();
