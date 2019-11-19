@@ -28,7 +28,7 @@ public class Car extends Vehicle{
     
     @Override
     public String toString() {
-	return getVehicleType() + " of type " + this.type +  " with plate " + getPlateNumber() + ", make " + getMake() + ", and colour " + getColour() + ".";
+	return getVehicleType() + " of type " + this.getType() +  " with plate " + getPlateNumber() + ", make " + getMake() + ", and colour " + getColour() + ".";
     }
     
     @Override

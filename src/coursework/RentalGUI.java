@@ -6,14 +6,35 @@
 package coursework;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
+import javax.swing.RowFilter;
 
 /**
  *
  * @author Dillan
  */
 public class RentalGUI extends JFrame {
+    private JComboBox picker;
+    private JTextField value;
+    private JButton filterBtn;
+    private VehicleTableModel tableModel;
+    private JTable table;
+    private TableRowSorter<TableModel> rowSorter;
+    
+    private JTextField startDay;
+    private JTextField startMonth;
+    private JTextField startYr;
+    private JTextField endDay;
+    private JTextField endMonth;
+    private JTextField endYr;
+    private JButton check;
+    
     
     public RentalGUI(ArrayList<Vehicle> list){
 	setLayout(new BorderLayout(5, 10));
@@ -24,24 +45,32 @@ public class RentalGUI extends JFrame {
     
     public JPanel createFilterPanel() {
 	JPanel filter = new JPanel();
+	filter.setBackground(Color.BLUE);
 	filter.setLayout(new GridLayout(8, 2, 0, 10));
 	JLabel title = new JLabel("Filter Vehicle List");
+	title.setForeground(Color.WHITE);
 	JLabel placeholder = new JLabel("");
 	filter.add(title);
-//	filter.add(placeholder);
+	filter.add(placeholder);
 	
 	JLabel param = new JLabel("Pick Filter Parameter");
-	JComboBox picker = new JComboBox(new String[]{"Make", "Colour"});
+	param.setForeground(Color.WHITE);
+	this.picker = new JComboBox(new String[]{"Select", "Type", "Make", "Colour"});
+	JLabel placeholder2 = new JLabel("");
 	JLabel valueLbl = new JLabel("Enter Value:");
-	JTextField value = new JTextField();
+	valueLbl.setForeground(Color.WHITE);
+	this.value = new JTextField();
 	
-	JButton filterBtn = new JButton("Filter Vehicles");
+	this.filterBtn = new JButton("Filter Vehicles");
+	FilterHandler filterHandle = new FilterHandler();
+	this.filterBtn.addActionListener(filterHandle);
 	
 	filter.add(param);
-	filter.add(picker);
+	filter.add(this.picker);
+	filter.add(placeholder2);
 	filter.add(valueLbl);
-	filter.add(value);
-	filter.add(filterBtn);
+	filter.add(this.value);
+	filter.add(this.filterBtn);
 	
 	
 	return filter;
@@ -49,12 +78,33 @@ public class RentalGUI extends JFrame {
     
     public JPanel createTablePanel(ArrayList<Vehicle> list) {
 	JPanel tbl = new JPanel();
+	tbl.setBackground(Color.BLUE);
 	tbl.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 20));
 	JLabel title = new JLabel("Vehicle List");
+	title.setForeground(Color.WHITE);
 	tbl.add(title);
 	
-	VehicleTableModel tableModel = new VehicleTableModel(list);
-	JTable table = new JTable(tableModel);
+	this.tableModel = new VehicleTableModel(list);
+	this.table = new JTable(this.tableModel);
+	this.rowSorter = new TableRowSorter<>(this.table.getModel());
+	this.table.setRowSorter(this.rowSorter);
+	
+	table.getColumnModel().getColumn(0).setCellRenderer(new DefaultTableCellRenderer(){
+	    Color originalColor = null;
+	    
+	    @Override
+	    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+		Component renderer;
+		renderer = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+		
+		if (value == "Car") {
+		    renderer.setBackground(Color.GREEN);
+		} else {
+		    renderer.setBackground(Color.CYAN);
+		}
+		return renderer;
+	    }
+	});
 	
 	JScrollPane scrollPane = new JScrollPane(table);
 	tbl.add(scrollPane);
@@ -64,46 +114,97 @@ public class RentalGUI extends JFrame {
     
     public JPanel createAvailabilityPanel() {
 	JPanel avail = new JPanel();
+	avail.setBackground(Color.BLUE);
 	avail.setLayout(new GridLayout(8, 2, 0, 10));
 	JLabel title = new JLabel("Check Availability");
+	title.setForeground(Color.WHITE);
 	avail.add(title);
 	avail.add(new JLabel());
 	
-	JTextField startDay = new JTextField(2);
+	this.startDay = new JTextField(2);
 	JLabel startDayLbl = new JLabel("Start day: (dd)");
+	startDayLbl.setForeground(Color.WHITE);
 	
-	JTextField startMonth = new JTextField(2);
+	this.startMonth = new JTextField(2);
 	JLabel startMonthLbl = new JLabel("Start month: (mm)");
+	startMonthLbl.setForeground(Color.WHITE);
 	
-	JTextField startYr = new JTextField(4);
+	this.startYr = new JTextField(4);
 	JLabel startYrLbl = new JLabel("Start year: (yyyy)");
+	startYrLbl.setForeground(Color.WHITE);
 	
-	JTextField endDay = new JTextField(2);
+	this.endDay = new JTextField(2);
 	JLabel endDayLbl = new JLabel("End day: (dd)");
+	endDayLbl.setForeground(Color.WHITE);
 	
-	JTextField endMonth = new JTextField(2);
+	this.endMonth = new JTextField(2);
 	JLabel endMonthLbl = new JLabel("End month: (mm)");
+	endMonthLbl.setForeground(Color.WHITE);
 	
-	JTextField endYr = new JTextField(4);
+	this.endYr = new JTextField(4);
 	JLabel endYrLbl = new JLabel("End year: (yyyy)");
+	endYrLbl.setForeground(Color.WHITE);
 	
-	JButton check = new JButton("Check Availability");
+	this.check = new JButton("Check Availability");
+	RentalHandler rentalHandle = new RentalHandler();
+	this.check.addActionListener(rentalHandle);
 	
 	avail.add(startDayLbl);
-	avail.add(startDay);
+	avail.add(this.startDay);
 	avail.add(startMonthLbl);
-	avail.add(startMonth);
+	avail.add(this.startMonth);
 	avail.add(startYrLbl);
-	avail.add(startYr);
+	avail.add(this.startYr);
 	avail.add(endDayLbl);
-	avail.add(endDay);
+	avail.add(this.endDay);
 	avail.add(endMonthLbl);
-	avail.add(endMonth);
+	avail.add(this.endMonth);
 	avail.add(endYrLbl);
-	avail.add(endYr);
+	avail.add(this.endYr);
 	avail.add(check);
 	
 	return avail;
+    }
+    
+    private class FilterHandler implements ActionListener {
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+	    if (picker.getSelectedItem() == "Type") {
+		rowSorter.setRowFilter(RowFilter.regexFilter(value.getText(), 0));
+	    } else if (picker.getSelectedItem() == "Make") {
+		rowSorter.setRowFilter(RowFilter.regexFilter(value.getText(), 2));
+	    } else if (picker.getSelectedItem() == "Colour") {
+		rowSorter.setRowFilter(RowFilter.regexFilter(value.getText(), 4));
+	    }
+ 	}
+    
+    }
+    
+    private class RentalHandler implements ActionListener {
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+	    try {
+		int startD = Integer.parseInt(startDay.getText());
+		int startM = Integer.parseInt(startMonth.getText());
+		int startY = Integer.parseInt(startYr.getText());
+		int endD = Integer.parseInt(endDay.getText());
+		int endM = Integer.parseInt(endMonth.getText());
+		int endY = Integer.parseInt(endYr.getText());
+		if (Date.couldBeValid(startD, startM, startY) && Date.couldBeValid(endD, endM, endY)) {
+		    int row = table.getSelectedRow();
+		    String value = table.getModel().getValueAt(row, 1).toString();
+//		    boolean available = 
+//		    System.out.println(value);
+		} else {
+		    JOptionPane.showMessageDialog(null, "At least one date is invalid. Make sure your dates are both valid.");
+		}
+	    } catch (NumberFormatException agh) {
+		JOptionPane.showMessageDialog(null, "Not all your numbers are valid. Please enter valid numbers.");
+	    }
+	}
+	
     }
     
 }

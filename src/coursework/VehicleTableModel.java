@@ -13,8 +13,8 @@ import javax.swing.table.AbstractTableModel;
  * @author Dillan
  */
 public class VehicleTableModel extends AbstractTableModel {
-    private String[] columnNames = {"Vehicle Type", "Plate Number", "Make", "Type", "Colour"};
-    private ArrayList<Vehicle> vehicles;
+    private final String[] columnNames = {"Vehicle Type", "Plate Number", "Make", "Subtype", "Colour"};
+    private final ArrayList<Vehicle> vehicles;
     
     public VehicleTableModel(ArrayList<Vehicle> list) {
 	vehicles = list;

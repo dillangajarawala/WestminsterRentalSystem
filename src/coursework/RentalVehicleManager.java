@@ -22,8 +22,6 @@ public interface RentalVehicleManager {
     
     public abstract void saveVehicleList() throws IOException;
     
-    public abstract ArrayList<Vehicle> filterVehicles(String param, String value);
-    
     public abstract boolean checkAvailability(String plateNumber, Date start, Date end);
     
     public abstract void bookVehicle(String plateNumber, Date pickUpDate, Date dropOffDate);

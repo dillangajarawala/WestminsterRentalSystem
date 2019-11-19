@@ -99,4 +99,15 @@ public class Date {
 	}
 	return false;
     }
+    
+    public static boolean couldBeValid (int day, int month, int year) {
+	if (day < 1 || day > 31) {
+	    return false;
+	} else if (month < 1 || month > 12) {
+	    return false;
+	} else if (year < 2019 || year > 2050) {
+	    return false;
+	}
+	return true;
+    }
 }
