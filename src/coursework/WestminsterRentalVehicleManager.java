@@ -27,10 +27,12 @@ import javax.swing.table.TableRowSorter;
 public class WestminsterRentalVehicleManager implements RentalVehicleManager {
     private final ArrayList<Vehicle> vehiclesToRent;
     private final ArrayList<Schedule> rentalSchedules;
+    private final HashSet<String> plateNumbers;
 
     public WestminsterRentalVehicleManager() {
 	vehiclesToRent = new ArrayList<>();
 	rentalSchedules = new ArrayList<>();
+	plateNumbers = new HashSet<>();
     }
     
     @Override
@@ -38,25 +40,29 @@ public class WestminsterRentalVehicleManager implements RentalVehicleManager {
 	if (vehiclesToRent.size() == 50) {
 	    System.out.println("Sorry, the rental parking lot is full. Please delete a vehicle from the system.");
 	} else if (vehiclesToRent.size() < 50) {
-	    vehiclesToRent.add(vehicleToAdd);
-	    System.out.println("Vehicle successfully added.");
+	    if (plateNumbers.contains(vehicleToAdd.getPlateNumber())) {
+		System.out.println("Vehicle is already in parking lot. Cancelling operation.");
+	    } else {
+		vehiclesToRent.add(vehicleToAdd);
+		plateNumbers.add(vehicleToAdd.getPlateNumber());
+		System.out.println("Vehicle successfully added.");
+	    }
 	}
     }
 
     @Override
     public void deleteVehicle(String plateNumber) {
-	Vehicle toDelete = null;
-	for (Vehicle v: vehiclesToRent) {
-	    if (v.getPlateNumber().equals(plateNumber)) {
-		toDelete = v;
+	if (plateNumbers.contains(plateNumber) == false) {
+	    System.out.println("Vehicle with plate " + plateNumber + " does not exist in system");
+	} else {
+	    Vehicle toDelete = null;
+	    for (Vehicle v: vehiclesToRent) {
+		if (v.getPlateNumber().equals(plateNumber)) {
+		    toDelete = v;
+		}
 	    }
-	}
-	
-	if (toDelete != null) {
 	    vehiclesToRent.remove(toDelete);
 	    System.out.println("Vehicle with plate " + plateNumber + " successfully deleted from system");
-	} else {
-	    System.out.println("Vehicle with plate " + plateNumber + " does not exist in system");
 	}
     }
 
@@ -73,11 +79,11 @@ public class WestminsterRentalVehicleManager implements RentalVehicleManager {
 
     @Override
     public void saveVehicleList() throws IOException {
-	PrintWriter writer = new PrintWriter("vehicles.txt");
-	for (Vehicle v : this.vehiclesToRent) {
-	    writer.println(v.toString());
+	try (FileWriter writer = new FileWriter("vehicles.txt")) {
+	    for (Vehicle v : this.vehiclesToRent) {
+		writer.write(v.toString());
+	    }
 	}
-	writer.close();
     }
 
     @Override
@@ -132,85 +138,105 @@ public class WestminsterRentalVehicleManager implements RentalVehicleManager {
 	System.out.println("To exit the console system press 6");
 	
 	Scanner s = new Scanner(System.in);
-        int choice = s.nextInt();
+	try {
+	    int choice = s.nextInt();
 	
-	switch(choice) {
-	    case 1:
-		System.out.println("Press 1 to add a Car");
-		System.out.println("Press 2 to add a Motorbike");
-		
-		int vehicleType = s.nextInt();
-		s.nextLine();
-		
-		System.out.println("Enter the plate number of the vehicle");
-		String plateNumber = s.nextLine();
-		
-		System.out.println("Enter the colour of the vehicle");
-		String colour = s.nextLine();
-		
-		System.out.println("Enter the make of the vehicle");
-		String make = s.nextLine();
-		
-		switch(vehicleType) {
-		    case 1:
-			Map<Integer, String> carTypes = new HashMap<>();
-			carTypes.put(1, "SUV");
-			carTypes.put(2, "Sedan");
-			carTypes.put(3, "Minivan");
-			System.out.println("Enter 1 for SUV, 2 for Sedan, or 3 for Minivan.");
-			int carType = s.nextInt();
-			s.nextLine();
-			Car c = new Car(plateNumber, make, carTypes.get(carType), colour);
-			addVehicle(c);
+	    switch(choice) {
+		case 1:
+		    System.out.println("Press 1 to add a Car");
+		    System.out.println("Press 2 to add a Motorbike");
+
+		    int vehicleType = s.nextInt();
+		    s.nextLine();
+		    if (vehicleType != 1 || vehicleType != 2) {
+			System.out.println();
+			System.out.println("Invalid vehicle type. Cancelling operation.");
+			System.out.println();
 			break;
-		    case 2:
-			Map<Integer, String> bikeTypes = new HashMap<>();
-			bikeTypes.put(1, "Moped");
-			bikeTypes.put(2, "Dirt Bike");
-			bikeTypes.put(3, "Cruiser");
-			System.out.println("Enter 1 for Moped, 2 for Dirt Bike, or 3 for Cruiser.");
-			int bikeType = s.nextInt();
-			s.nextLine();
-			Motorbike m = new Motorbike(plateNumber, make, bikeTypes.get(bikeType), colour);
-			addVehicle(m);
-			break;	
-		}
-		System.out.println();
-		break;
-		
-	    case 2:
-		s.nextLine();
-		System.out.println("Enter the plate number of the vehicle");
-		String plateToDelete = s.nextLine();
-		deleteVehicle(plateToDelete);
-		System.out.println();
-		break;
-		
-	    case 3:
-		printVehicles();
-		System.out.println();
-		break;
-		
-	    case 4:
-	    try {
-		saveVehicleList();
-	    } catch (IOException ex) {
-		Logger.getLogger(WestminsterRentalVehicleManager.class.getName()).log(Level.SEVERE, null, ex);
+		    }
+
+		    System.out.println("Enter the plate number of the vehicle");
+		    String plateNumber = s.nextLine();
+
+		    System.out.println("Enter the colour of the vehicle");
+		    String colour = s.nextLine();
+
+		    System.out.println("Enter the make of the vehicle");
+		    String make = s.nextLine();
+
+		    switch(vehicleType) {
+			case 1:
+			    Map<Integer, String> carTypes = new HashMap<>();
+			    carTypes.put(1, "SUV");
+			    carTypes.put(2, "Sedan");
+			    carTypes.put(3, "Minivan");
+			    System.out.println("Enter 1 for SUV, 2 for Sedan, or 3 for Minivan.");
+			    int carType = s.nextInt();
+			    s.nextLine();
+			    if (carTypes.containsKey(carType)) {
+				Car c = new Car(plateNumber, make, carTypes.get(carType), colour);
+				addVehicle(c);
+			    } else {
+				System.out.println();
+				System.out.println("Invalid Car Type. Cancelling operation.");
+				System.out.println();
+			    }
+			    break;
+			case 2:
+			    Map<Integer, String> bikeTypes = new HashMap<>();
+			    bikeTypes.put(1, "Moped");
+			    bikeTypes.put(2, "Dirt Bike");
+			    bikeTypes.put(3, "Cruiser");
+			    System.out.println("Enter 1 for Moped, 2 for Dirt Bike, or 3 for Cruiser.");
+			    int bikeType = s.nextInt();
+			    s.nextLine();
+			    if (bikeTypes.containsKey(bikeType)) {
+				Motorbike m = new Motorbike(plateNumber, make, bikeTypes.get(bikeType), colour);
+				addVehicle(m);
+			    } else {
+				System.out.println();
+				System.out.println("Invalid Motorbike Type. Cancelling operation.");
+				System.out.println();
+			    }
+			    break;	
+		    }
+		    System.out.println();
+		    break;
+
+		case 2:
+		    s.nextLine();
+		    System.out.println("Enter the plate number of the vehicle");
+		    String plateToDelete = s.nextLine();
+		    deleteVehicle(plateToDelete);
+		    System.out.println();
+		    break;
+
+		case 3:
+		    printVehicles();
+		    System.out.println();
+		    break;
+
+		case 4:
+		    try {
+			saveVehicleList();
+		    } catch (IOException ex) {
+			Logger.getLogger(WestminsterRentalVehicleManager.class.getName()).log(Level.SEVERE, null, ex);
+		    }
+			System.out.println();
+		    break;
+
+		case 5:
+		    launchGUI();
+		    break;
+
+		case 6:
+		    exit = true;
+		    break;
 	    }
-		System.out.println();
-		break;
-		
-	    case 5:
-		launchGUI();
-		break;
-		
-	    case 6:
-		exit = true;
-		break;
-		
-	    default:
-		System.out.println("Please enter valid input.");
-		break;
+	} catch (InputMismatchException e) {
+	    System.out.println();
+	    System.out.println("Please enter valid input.");
+	    System.out.println();
 	}
 	return exit;
     }
