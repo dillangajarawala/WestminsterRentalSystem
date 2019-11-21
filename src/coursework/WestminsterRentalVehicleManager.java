@@ -304,7 +304,6 @@ public class WestminsterRentalVehicleManager implements RentalVehicleManager {
 	    filter.add(this.value);
 	    filter.add(this.filterBtn);
 
-
 	    return filter;
 	}
 
@@ -337,7 +336,6 @@ public class WestminsterRentalVehicleManager implements RentalVehicleManager {
 		    return renderer;
 		}
 	    });
-
 	    JScrollPane scrollPane = new JScrollPane(table);
 	    tbl.add(scrollPane);
 
@@ -442,7 +440,6 @@ public class WestminsterRentalVehicleManager implements RentalVehicleManager {
 			    }	
 			} else {
 			    JOptionPane.showMessageDialog(null, "Sorry, vehicle with plate " + value + " is not available in this date range.");
-
 			}
 
 		    } else {
@@ -452,9 +449,6 @@ public class WestminsterRentalVehicleManager implements RentalVehicleManager {
 		    JOptionPane.showMessageDialog(null, "Not all your numbers are valid. Please enter valid numbers.");
 		}
 	    }
-
 	}
-
     }
-    
 }
