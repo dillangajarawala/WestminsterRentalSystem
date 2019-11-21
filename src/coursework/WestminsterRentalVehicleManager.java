@@ -14,7 +14,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.util.*;
-import java.util.logging.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableModel;
@@ -81,7 +80,7 @@ public class WestminsterRentalVehicleManager implements RentalVehicleManager {
     public void saveVehicleList() throws IOException {
 	try (FileWriter writer = new FileWriter("vehicles.txt")) {
 	    for (Vehicle v : this.vehiclesToRent) {
-		writer.write(v.toString());
+		writer.write(v.toString() + "\n");
 	    }
 	}
     }
@@ -134,7 +133,7 @@ public class WestminsterRentalVehicleManager implements RentalVehicleManager {
 	System.out.println("To Delete a Vehicle press 2");
 	System.out.println("To Print the list of Vehicles press 3");
 	System.out.println("To Save the list of Vehicles press 4");
-	System.out.println("To launch the Customer Graphical User Interface press 5");
+	System.out.println("To launch the Customer GUI press 5");
 	System.out.println("To exit the console system press 6");
 	
 	Scanner s = new Scanner(System.in);
@@ -148,7 +147,7 @@ public class WestminsterRentalVehicleManager implements RentalVehicleManager {
 
 		    int vehicleType = s.nextInt();
 		    s.nextLine();
-		    if (vehicleType != 1 || vehicleType != 2) {
+		    if (vehicleType != 1 && vehicleType != 2) {
 			System.out.println();
 			System.out.println("Invalid vehicle type. Cancelling operation.");
 			System.out.println();
@@ -171,15 +170,19 @@ public class WestminsterRentalVehicleManager implements RentalVehicleManager {
 			    carTypes.put(2, "Sedan");
 			    carTypes.put(3, "Minivan");
 			    System.out.println("Enter 1 for SUV, 2 for Sedan, or 3 for Minivan.");
-			    int carType = s.nextInt();
-			    s.nextLine();
-			    if (carTypes.containsKey(carType)) {
-				Car c = new Car(plateNumber, make, carTypes.get(carType), colour);
-				addVehicle(c);
-			    } else {
-				System.out.println();
-				System.out.println("Invalid Car Type. Cancelling operation.");
-				System.out.println();
+			    try {
+				int carType = s.nextInt();
+				s.nextLine();
+				if (carTypes.containsKey(carType)) {
+				    Car c = new Car(plateNumber, make, carTypes.get(carType), colour);
+				    addVehicle(c);
+				} else {
+				    System.out.println();
+				    System.out.println("Invalid Car Type. Cancelling operation.");
+				    System.out.println();
+				} 
+			    } catch (InputMismatchException e) {
+				System.out.println("Invalid Input. Cancelling operation.");
 			    }
 			    break;
 			case 2:
@@ -188,15 +191,19 @@ public class WestminsterRentalVehicleManager implements RentalVehicleManager {
 			    bikeTypes.put(2, "Dirt Bike");
 			    bikeTypes.put(3, "Cruiser");
 			    System.out.println("Enter 1 for Moped, 2 for Dirt Bike, or 3 for Cruiser.");
-			    int bikeType = s.nextInt();
-			    s.nextLine();
-			    if (bikeTypes.containsKey(bikeType)) {
-				Motorbike m = new Motorbike(plateNumber, make, bikeTypes.get(bikeType), colour);
-				addVehicle(m);
-			    } else {
-				System.out.println();
-				System.out.println("Invalid Motorbike Type. Cancelling operation.");
-				System.out.println();
+			    try {
+				int bikeType = s.nextInt();
+				s.nextLine();
+				if (bikeTypes.containsKey(bikeType)) {
+				    Motorbike m = new Motorbike(plateNumber, make, bikeTypes.get(bikeType), colour);
+				    addVehicle(m);
+				} else {
+				    System.out.println();
+				    System.out.println("Invalid Motorbike Type. Cancelling operation.");
+				    System.out.println();
+				} 
+			    } catch (InputMismatchException e) {
+				System.out.println("Invalid Input. Cancelling operation.");
 			    }
 			    break;	
 		    }
@@ -219,8 +226,10 @@ public class WestminsterRentalVehicleManager implements RentalVehicleManager {
 		case 4:
 		    try {
 			saveVehicleList();
+			System.out.println("Saving...");
+			System.out.println("Vehicle list saved.");
 		    } catch (IOException ex) {
-			Logger.getLogger(WestminsterRentalVehicleManager.class.getName()).log(Level.SEVERE, null, ex);
+			System.out.println("Error saving Vehicle list. Try Again.");
 		    }
 			System.out.println();
 		    break;
