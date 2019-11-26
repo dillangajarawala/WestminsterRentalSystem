@@ -27,6 +27,7 @@ public class WestminsterRentalVehicleManager implements RentalVehicleManager {
     private final ArrayList<Vehicle> vehiclesToRent;
     private final ArrayList<Schedule> rentalSchedules;
     private final HashSet<String> plateNumbers;
+    private final int lotSize = 50;
 
     public WestminsterRentalVehicleManager() {
 	vehiclesToRent = new ArrayList<>();
@@ -36,9 +37,9 @@ public class WestminsterRentalVehicleManager implements RentalVehicleManager {
     
     @Override
     public void addVehicle(Vehicle vehicleToAdd) {
-	if (vehiclesToRent.size() == 50) {
+	if (vehiclesToRent.size() == lotSize) {
 	    System.out.println("Sorry, the rental parking lot is full. Please delete a vehicle from the system.");
-	} else if (vehiclesToRent.size() < 50) {
+	} else if (vehiclesToRent.size() < lotSize) {
 	    if (plateNumbers.contains(vehicleToAdd.getPlateNumber())) {
 		System.out.println("Vehicle is already in parking lot. Cancelling operation.");
 	    } else {
