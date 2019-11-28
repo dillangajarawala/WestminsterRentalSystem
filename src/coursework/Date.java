@@ -50,20 +50,21 @@ public class Date {
     }
     
     public String getDate() {
-        if (this.day < 9) {
-            return "0" + this.day + "/" + this.month + "/" + this.year;
+	String dayNum = Integer.toString(this.day);
+	String monthNum = Integer.toString(this.month);
+        if (this.day <= 9) {
+            dayNum = "0" + this.day;
         }
-        else {
-            return this.day + "/" + this.month + "/" + this.year;
-        }
+	if (this.month <= 9) {
+	    monthNum = "0" + this.month;
+	}
+        return dayNum + "/" + monthNum + "/" + this.year;
     }
     
-    public boolean withinRange(Date date1, Date date2) {
-	if (year >= date1.getYear() && year <= date2.getYear()) {
-	    if (month >= date1.getMonth() && month <= date2.getMonth()) {
-		if (day >= date1.getDay() && day <= date2.getDay()) {
-		    return true;
-		}
+    public boolean withinRange(Date start, Date end) {
+	if (this.getDate().equals(start.getDate()) || this.greaterThan(start)) {
+	    if (this.getDate().equals(end.getDate()) || this.lessThan(end)) {
+		return true;
 	    }
 	}
 	return false;
