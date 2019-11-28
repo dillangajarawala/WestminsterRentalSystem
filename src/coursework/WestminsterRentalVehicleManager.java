@@ -37,15 +37,17 @@ public class WestminsterRentalVehicleManager implements RentalVehicleManager {
     
     @Override
     public void addVehicle(Vehicle vehicleToAdd) {
-	if (vehiclesToRent.size() == lotSize) {
-	    System.out.println("Sorry, the rental parking lot is full. Please delete a vehicle from the system.");
-	} else if (vehiclesToRent.size() < lotSize) {
+	if (vehiclesToRent.size() < lotSize) {
 	    if (plateNumbers.contains(vehicleToAdd.getPlateNumber())) {
 		System.out.println("Vehicle is already in parking lot. Cancelling operation.");
 	    } else {
 		vehiclesToRent.add(vehicleToAdd);
 		plateNumbers.add(vehicleToAdd.getPlateNumber());
-		System.out.println("Vehicle successfully added.");
+		if (vehicleToAdd.getVehicleType().equals("Car")) {
+		System.out.println("Car successfully added.");
+		} else {
+		    System.out.println("Motorbike successfully added.");
+		}
 	    }
 	}
     }
@@ -53,7 +55,7 @@ public class WestminsterRentalVehicleManager implements RentalVehicleManager {
     @Override
     public void deleteVehicle(String plateNumber) {
 	if (plateNumbers.contains(plateNumber) == false) {
-	    System.out.println("Vehicle with plate " + plateNumber + " does not exist in system");
+	    System.out.println("Vehicle with plate " + plateNumber + " does not exist in system.");
 	} else {
 	    Vehicle toDelete = null;
 	    for (Vehicle v: vehiclesToRent) {
@@ -62,27 +64,37 @@ public class WestminsterRentalVehicleManager implements RentalVehicleManager {
 		}
 	    }
 	    vehiclesToRent.remove(toDelete);
-	    System.out.println("Vehicle with plate " + plateNumber + " successfully deleted from system");
+	    System.out.println("Vehicle with plate " + plateNumber + " successfully deleted from system.");
 	}
     }
 
     @Override
     public void printVehicles() {
 	System.out.println();
-	System.out.println("VEHICLE LIST:");
-	ArrayList<Vehicle> sortedVehicles = this.vehiclesToRent;
-	Collections.sort(sortedVehicles);
-	for (Vehicle v: sortedVehicles) {
-	    System.out.println(v);
+	if (this.vehiclesToRent.isEmpty()) {
+	    System.out.println("There are no vehicles in the rental parking lot. Please add one.");
+	} else {
+	    System.out.println("VEHICLE LIST:");
+	    ArrayList<Vehicle> sortedVehicles = this.vehiclesToRent;
+	    Collections.sort(sortedVehicles);
+	    for (Vehicle v: sortedVehicles) {
+		System.out.println(v);
+	} 
 	}
     }
 
     @Override
     public void saveVehicleList() throws IOException {
+	if (this.vehiclesToRent.isEmpty()) {
+	    System.out.println("Rental parking lot is empty. Nothing to save.");
+	    return;
+	}
+	System.out.println("Saving...");
 	try (FileWriter writer = new FileWriter("vehicles.txt")) {
 	    for (Vehicle v : this.vehiclesToRent) {
 		writer.write(v.toString() + "\n");
 	    }
+	    System.out.println("Vehicle list saved.");
 	}
     }
 
@@ -143,6 +155,10 @@ public class WestminsterRentalVehicleManager implements RentalVehicleManager {
 	
 	    switch(choice) {
 		case 1:
+		    if (this.vehiclesToRent.size() == this.lotSize) {
+			System.out.println("Sorry, the rental parking lot is full. Please delete a vehicle from the system.");
+			break;
+		    }
 		    System.out.println("Press 1 to add a Car");
 		    System.out.println("Press 2 to add a Motorbike");
 
@@ -155,13 +171,13 @@ public class WestminsterRentalVehicleManager implements RentalVehicleManager {
 			break;
 		    }
 
-		    System.out.println("Enter the plate number of the vehicle");
+		    System.out.println("Enter the plate number of the vehicle:");
 		    String plateNumber = s.nextLine();
 
-		    System.out.println("Enter the colour of the vehicle");
+		    System.out.println("Enter the colour of the vehicle:");
 		    String colour = s.nextLine();
 
-		    System.out.println("Enter the make of the vehicle");
+		    System.out.println("Enter the make of the vehicle:");
 		    String make = s.nextLine();
 
 		    switch(vehicleType) {
@@ -227,8 +243,6 @@ public class WestminsterRentalVehicleManager implements RentalVehicleManager {
 		case 4:
 		    try {
 			saveVehicleList();
-			System.out.println("Saving...");
-			System.out.println("Vehicle list saved.");
 		    } catch (IOException ex) {
 			System.out.println("Error saving Vehicle list. Try Again.");
 		    }
@@ -434,19 +448,20 @@ public class WestminsterRentalVehicleManager implements RentalVehicleManager {
 			Date end = new Date(endD, endM, endY);
 			boolean available = checkAvailability(value, start, end);
 			if (available) {
-			    String message = "Vehicle with plate " + value + " is available in this date range. Would you like to book it?";
+			    String message = "Vehicle with plate " + value + " is available between " + start.getDate() + " and " + end.getDate() + ". Would you like to book it?";
 			    int book = JOptionPane.showConfirmDialog(null, message, "Book Vehicle", 0);
 			    if (book == 0) {
 				bookVehicle(value, start, end);
+				JOptionPane.showMessageDialog(null, "Wonderful! Vehicle with plate " + value + " has been booked between " + start.getDate() + " and " + end.getDate() + ".");
 			    }	
 			} else {
-			    JOptionPane.showMessageDialog(null, "Sorry, vehicle with plate " + value + " is not available in this date range.");
+			    JOptionPane.showMessageDialog(null, "Sorry, vehicle with plate " + value + " is not available between " + start.getDate() + " and " + end.getDate() + ".");
 			}
 
 		    } else {
 			JOptionPane.showMessageDialog(null, "At least one date is invalid. Make sure your dates are both valid.");
 		    }
-		} catch (NumberFormatException agh) {
+		} catch (NumberFormatException nfe) {
 		    JOptionPane.showMessageDialog(null, "Not all your numbers are valid. Please enter valid numbers.");
 		}
 	    }
