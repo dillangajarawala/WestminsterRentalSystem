@@ -38,7 +38,7 @@ public class DateTest {
      */
     @Test
     public void testGetDate() {
-	System.out.print("Testing getDate()...");
+	System.out.print("Testing Date.getDate()...");
 	String date1Result = "09/01/2020";
 	String date2Result = "21/12/2021";
 	assertEquals(date1Result, date1.getDate());
@@ -52,7 +52,7 @@ public class DateTest {
      */
     @Test
     public void testWithinRange() {
-	System.out.print("Testing withinRange()...");
+	System.out.print("Testing Date.withinRange()...");
 	Date within = new Date(6, 3, 2020);
 	Date notWithin = new Date(8, 1, 2020);
 	assertTrue(within.withinRange(date1, date2));
@@ -66,7 +66,7 @@ public class DateTest {
      */
     @Test
     public void testGreaterThan() {
-	System.out.print("Testing greaterThan()...");
+	System.out.print("Testing Date.greaterThan()...");
 	Date greaterThanOne = new Date(10, 1, 2020);
 	assertTrue(greaterThanOne.greaterThan(date1));
 	assertFalse(greaterThanOne.greaterThan(date2));
@@ -79,7 +79,7 @@ public class DateTest {
      */
     @Test
     public void testLessThan() {
-	System.out.print("Testing lessThan()...");
+	System.out.print("Testing Date.lessThan()...");
 	Date lessThanOne = new Date(13, 11, 2020);
 	assertTrue(lessThanOne.lessThan(date2));
 	assertFalse(lessThanOne.lessThan(date1));
@@ -92,32 +92,32 @@ public class DateTest {
      */
     @Test
     public void testOverlap() {
-	System.out.println("overlap");
-	Date start1 = null;
-	Date end1 = null;
-	Date start2 = null;
-	Date end2 = null;
-	boolean expResult = false;
-	boolean result = Date.overlap(start1, end1, start2, end2);
-	assertEquals(expResult, result);
-	// TODO review the generated test code and remove the default call to fail.
-	fail("The test case is a prototype.");
+	System.out.print("Testing Date.overlap()...");
+	Date start1 = new Date(31, 12, 2019);
+	Date end1 = new Date(31, 1, 2020);
+	Date start2 = new Date(22, 12, 2021);
+	Date end2 = new Date(25, 12, 2021);
+	boolean result1 = Date.overlap(date1, date2, start1, end1);
+	assertTrue(result1);
+	boolean result2 = Date.overlap(date1, date2, start2, end2);
+	assertFalse(result2);
+	System.out.print("PASSED");
+	System.out.println();
     }
 
-//    /**
-//     * Test of couldBeValid method, of class Date.
-//     */
-//    @Test
-//    public void testCouldBeValid() {
-//	System.out.println("couldBeValid");
-//	int day = 0;
-//	int month = 0;
-//	int year = 0;
-//	boolean expResult = false;
-//	boolean result = Date.couldBeValid(day, month, year);
-//	assertEquals(expResult, result);
-//	// TODO review the generated test code and remove the default call to fail.
-//	fail("The test case is a prototype.");
-//    }
+    /**
+     * Test of couldBeValid method, of class Date.
+     */
+    @Test
+    public void testCouldBeValid() {
+	System.out.print("Testing Date.couldBeValid()...");
+	assertTrue(Date.couldBeValid(31, 12, 2020));
+	assertTrue(Date.couldBeValid(1, 1, 2021));
+	assertFalse(Date.couldBeValid(35, 12, 2019));
+	assertFalse(Date.couldBeValid(9, 13, 2019));
+	assertFalse(Date.couldBeValid(8, 12, 900));
+	System.out.print("PASSED");
+	System.out.println();
+    }
     
 }
