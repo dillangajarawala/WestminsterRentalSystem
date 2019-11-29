@@ -13,9 +13,9 @@ import java.io.IOException;
  */
 public interface RentalVehicleManager {
     
-    public abstract void addVehicle(Vehicle vehicleToAdd);
+    public abstract boolean addVehicle(Vehicle vehicleToAdd);
     
-    public abstract void deleteVehicle(String plateNumber);
+    public abstract boolean deleteVehicle(String plateNumber);
     
     public abstract void printVehicles();
     

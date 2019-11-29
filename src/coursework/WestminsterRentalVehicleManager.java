@@ -35,37 +35,41 @@ public class WestminsterRentalVehicleManager implements RentalVehicleManager {
 	plateNumbers = new HashSet<>();
     }
     
+    public ArrayList<Vehicle> getVehiclesToRent() {
+	return this.vehiclesToRent;
+    }
+    
+    public ArrayList<Schedule> getRentalSchedules() {
+	return this.rentalSchedules;
+    }
+    
+    public HashSet<String> getPlateNumbers() {
+	return this.plateNumbers;
+    }
+    
     @Override
-    public void addVehicle(Vehicle vehicleToAdd) {
-	if (vehiclesToRent.size() < lotSize) {
-	    if (plateNumbers.contains(vehicleToAdd.getPlateNumber())) {
-		System.out.println("Vehicle is already in parking lot. Cancelling operation.");
-	    } else {
-		vehiclesToRent.add(vehicleToAdd);
-		plateNumbers.add(vehicleToAdd.getPlateNumber());
-		if (vehicleToAdd.getVehicleType().equals("Car")) {
-		System.out.println("Car successfully added.");
-		} else {
-		    System.out.println("Motorbike successfully added.");
-		}
-	    }
+    public boolean addVehicle(Vehicle vehicleToAdd) {
+	if (plateNumbers.contains(vehicleToAdd.getPlateNumber()) || vehiclesToRent.size() == 50) {
+	    return false;
 	}
+	vehiclesToRent.add(vehicleToAdd);
+	plateNumbers.add(vehicleToAdd.getPlateNumber());
+	return true;
     }
 
     @Override
-    public void deleteVehicle(String plateNumber) {
+    public boolean deleteVehicle(String plateNumber) {
 	if (plateNumbers.contains(plateNumber) == false) {
-	    System.out.println("Vehicle with plate " + plateNumber + " does not exist in system.");
-	} else {
-	    Vehicle toDelete = null;
-	    for (Vehicle v: vehiclesToRent) {
-		if (v.getPlateNumber().equals(plateNumber)) {
-		    toDelete = v;
-		}
-	    }
-	    vehiclesToRent.remove(toDelete);
-	    System.out.println("Vehicle with plate " + plateNumber + " successfully deleted from system.");
+	    return false;
 	}
+	Vehicle toDelete = null;
+	for (Vehicle v: vehiclesToRent) {
+	    if (v.getPlateNumber().equals(plateNumber)) {
+		toDelete = v;
+	    }
+	}
+	vehiclesToRent.remove(toDelete);
+	return true;
     }
 
     @Override
@@ -192,7 +196,12 @@ public class WestminsterRentalVehicleManager implements RentalVehicleManager {
 				s.nextLine();
 				if (carTypes.containsKey(carType)) {
 				    Car c = new Car(plateNumber, make, carTypes.get(carType), colour);
-				    addVehicle(c);
+				    boolean added = addVehicle(c);
+				    if (added) {
+					System.out.println("Car successfully added.");
+				    } else {
+					System.out.println("Vehicle is already in parking lot. Cancelling operation.");
+				    }
 				} else {
 				    System.out.println();
 				    System.out.println("Invalid Car Type. Cancelling operation.");
@@ -213,7 +222,12 @@ public class WestminsterRentalVehicleManager implements RentalVehicleManager {
 				s.nextLine();
 				if (bikeTypes.containsKey(bikeType)) {
 				    Motorbike m = new Motorbike(plateNumber, make, bikeTypes.get(bikeType), colour);
-				    addVehicle(m);
+				    boolean added = addVehicle(m);
+				    if (added) {
+					System.out.println("Motorbike successfully added.");
+				    } else {
+					System.out.println("Vehicle is already in parking lot. Cancelling operation.");
+				    }
 				} else {
 				    System.out.println();
 				    System.out.println("Invalid Motorbike Type. Cancelling operation.");
@@ -231,7 +245,12 @@ public class WestminsterRentalVehicleManager implements RentalVehicleManager {
 		    s.nextLine();
 		    System.out.println("Enter the plate number of the vehicle");
 		    String plateToDelete = s.nextLine();
-		    deleteVehicle(plateToDelete);
+		    boolean deleted = deleteVehicle(plateToDelete);
+		    if (deleted) {
+			System.out.println("Vehicle with plate " + plateToDelete + " successfully deleted from system.");
+		    } else {
+			System.out.println("Vehicle with plate " + plateToDelete + " does not exist in system.");
+		    }
 		    System.out.println();
 		    break;
 
