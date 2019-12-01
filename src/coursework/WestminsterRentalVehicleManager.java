@@ -88,17 +88,15 @@ public class WestminsterRentalVehicleManager implements RentalVehicleManager {
     }
 
     @Override
-    public void saveVehicleList() throws IOException {
+    public boolean saveVehicleList() throws IOException {
 	if (this.vehiclesToRent.isEmpty()) {
-	    System.out.println("Rental parking lot is empty. Nothing to save.");
-	    return;
+	    return false;
 	}
-	System.out.println("Saving...");
 	try (FileWriter writer = new FileWriter("vehicles.txt")) {
 	    for (Vehicle v : this.vehiclesToRent) {
-		writer.write(v.toString() + "\n");
+		writer.write(v.getVehicleType() + "," + v.getType() + "," + v.getMake() + "," + v.getPlateNumber() + "," + v.getColour() + "\n");
 	    }
-	    System.out.println("Vehicle list saved.");
+	    return true;
 	}
     }
 
@@ -118,7 +116,7 @@ public class WestminsterRentalVehicleManager implements RentalVehicleManager {
     }
 
     @Override
-    public void bookVehicle(String plateNumber, Date pickUpDate, Date dropOffDate) {
+    public boolean bookVehicle(String plateNumber, Date pickUpDate, Date dropOffDate) {
 	boolean booked = false;
 	for (Vehicle v: vehiclesToRent) {
 	    if (v.getPlateNumber().equals(plateNumber)) {
@@ -126,11 +124,7 @@ public class WestminsterRentalVehicleManager implements RentalVehicleManager {
 		booked = true;
 	    }
 	}
-	if (booked) {
-	    System.out.println("Vehicle with plate " + plateNumber + " successfully booked from " + pickUpDate.getDate() + " to " + dropOffDate.getDate() + ".");
-	} else {
-	    System.out.println("Vehicle with plate " + plateNumber + " does not exist in system");
-	}
+	return booked;
     }
 
     @Override
@@ -260,8 +254,14 @@ public class WestminsterRentalVehicleManager implements RentalVehicleManager {
 		    break;
 
 		case 4:
+		    System.out.println("Saving...");
 		    try {
-			saveVehicleList();
+			boolean saved = saveVehicleList();
+			if (saved) {
+			    System.out.println("Vehicle list saved.");
+			} else {
+			    System.out.println("Rental parking lot is empty. Nothing to save.");
+			}
 		    } catch (IOException ex) {
 			System.out.println("Error saving Vehicle list. Try Again.");
 		    }
@@ -470,8 +470,12 @@ public class WestminsterRentalVehicleManager implements RentalVehicleManager {
 			    String message = "Vehicle with plate " + value + " is available between " + start.getDate() + " and " + end.getDate() + ". Would you like to book it?";
 			    int book = JOptionPane.showConfirmDialog(null, message, "Book Vehicle", 0);
 			    if (book == 0) {
-				bookVehicle(value, start, end);
-				JOptionPane.showMessageDialog(null, "Wonderful! Vehicle with plate " + value + " has been booked between " + start.getDate() + " and " + end.getDate() + ".");
+				boolean booked = bookVehicle(value, start, end);
+				if (booked) {
+				    JOptionPane.showMessageDialog(null, "Wonderful! Vehicle with plate " + value + " has been booked between " + start.getDate() + " and " + end.getDate() + ".");
+				} else {
+				    JOptionPane.showMessageDialog(null, "Unable to book vehicle with plate " + value + " between " + start.getDate() + " and " + end.getDate() + ".");
+				}
 			    }	
 			} else {
 			    JOptionPane.showMessageDialog(null, "Sorry, vehicle with plate " + value + " is not available between " + start.getDate() + " and " + end.getDate() + ".");

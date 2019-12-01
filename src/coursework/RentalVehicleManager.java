@@ -19,11 +19,11 @@ public interface RentalVehicleManager {
     
     public abstract void printVehicles();
     
-    public abstract void saveVehicleList() throws IOException;
+    public abstract boolean saveVehicleList() throws IOException;
     
     public abstract boolean checkAvailability(String plateNumber, Date start, Date end);
     
-    public abstract void bookVehicle(String plateNumber, Date pickUpDate, Date dropOffDate);
+    public abstract boolean bookVehicle(String plateNumber, Date pickUpDate, Date dropOffDate);
     
     public abstract void launchGUI();
     
