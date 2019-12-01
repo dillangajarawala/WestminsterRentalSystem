@@ -120,11 +120,14 @@ public class WestminsterRentalVehicleManagerTest {
     @Test
     public void testSaveVehicleList() throws Exception {
 	System.out.print("Testing WestminsterRentalVehicleManager.saveVehicleList()...");
+	boolean saved = rvm.saveVehicleList();
+	assertFalse(saved);
 	Car c1 = new Car("TEST1", "Mercedes", "SUV", "silver");
 	Motorbike m1 = new Motorbike("TEST2", "BMW", "Moped", "black");
 	rvm.addVehicle(c1);
 	rvm.addVehicle(m1);
-	rvm.saveVehicleList();
+	saved = rvm.saveVehicleList();
+	assertTrue(saved);
 	File file = new File("vehicles.txt");
 	try {
 	    FileReader r = new FileReader(file);
