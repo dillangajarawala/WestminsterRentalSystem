@@ -5,6 +5,12 @@
  */
 package coursework;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -83,86 +89,102 @@ public class WestminsterRentalVehicleManagerTest {
 	System.out.println();
     }
 
-//    /**
-//     * Test of printVehicles method, of class WestminsterRentalVehicleManager.
-//     */
-//    @Test
-//    public void testPrintVehicles() {
-//	System.out.println("printVehicles");
-//	WestminsterRentalVehicleManager instance = new WestminsterRentalVehicleManager();
-//	instance.printVehicles();
-//	// TODO review the generated test code and remove the default call to fail.
-//	fail("The test case is a prototype.");
-//    }
+    /**
+     * Test of printVehicles method, of class WestminsterRentalVehicleManager.
+     */
+    @Test
+    public void testPrintVehicles() {
+	System.out.print("Testing WestminsterRentalVehicleManager.printVehicles()...");
+	PrintStream psOrig = System.out;
+	OutputStream os = new ByteArrayOutputStream();
+	PrintStream ps = new PrintStream(os);
+	System.setOut(ps);
+	Car c1 = new Car("TEST", "Mercedes", "SUV", "silver");
+	rvm.addVehicle(c1);
+	rvm.printVehicles();
+	assertEquals("\nVEHICLE LIST:\nCar of type SUV with plate TEST, make Mercedes, and colour silver." + System.getProperty("line.separator"), os.toString());
+	os = new ByteArrayOutputStream();
+	ps = new PrintStream(os);
+	System.setOut(ps);
+	rvm.deleteVehicle("TEST");
+	rvm.printVehicles();
+	assertEquals("\nThere are no vehicles in the rental parking lot. Please add one." + System.getProperty("line.separator"), os.toString());
+	System.setOut(psOrig);
+	System.out.print("PASSED");
+	System.out.println();
+    }
 
-//    /**
-//     * Test of saveVehicleList method, of class WestminsterRentalVehicleManager.
-//     */
-//    @Test
-//    public void testSaveVehicleList() throws Exception {
-//	System.out.println("saveVehicleList");
-//	WestminsterRentalVehicleManager instance = new WestminsterRentalVehicleManager();
-//	instance.saveVehicleList();
-//	// TODO review the generated test code and remove the default call to fail.
-//	fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of checkAvailability method, of class WestminsterRentalVehicleManager.
-//     */
-//    @Test
-//    public void testCheckAvailability() {
-//	System.out.println("checkAvailability");
-//	String plateNumber = "";
-//	Date start = null;
-//	Date end = null;
-//	WestminsterRentalVehicleManager instance = new WestminsterRentalVehicleManager();
-//	boolean expResult = false;
-//	boolean result = instance.checkAvailability(plateNumber, start, end);
-//	assertEquals(expResult, result);
-//	// TODO review the generated test code and remove the default call to fail.
-//	fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of bookVehicle method, of class WestminsterRentalVehicleManager.
-//     */
-//    @Test
-//    public void testBookVehicle() {
-//	System.out.println("bookVehicle");
-//	String plateNumber = "";
-//	Date pickUpDate = null;
-//	Date dropOffDate = null;
-//	WestminsterRentalVehicleManager instance = new WestminsterRentalVehicleManager();
-//	instance.bookVehicle(plateNumber, pickUpDate, dropOffDate);
-//	// TODO review the generated test code and remove the default call to fail.
-//	fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of launchGUI method, of class WestminsterRentalVehicleManager.
-//     */
-//    @Test
-//    public void testLaunchGUI() {
-//	System.out.println("launchGUI");
-//	WestminsterRentalVehicleManager instance = new WestminsterRentalVehicleManager();
-//	instance.launchGUI();
-//	// TODO review the generated test code and remove the default call to fail.
-//	fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of launchMenu method, of class WestminsterRentalVehicleManager.
-//     */
-//    @Test
-//    public void testLaunchMenu() {
-//	System.out.println("launchMenu");
-//	WestminsterRentalVehicleManager instance = new WestminsterRentalVehicleManager();
-//	boolean expResult = false;
-//	boolean result = instance.launchMenu();
-//	assertEquals(expResult, result);
-//	// TODO review the generated test code and remove the default call to fail.
-//	fail("The test case is a prototype.");
-//    }
-    
+    /**
+     * Test of saveVehicleList method, of class WestminsterRentalVehicleManager.
+     */
+    @Test
+    public void testSaveVehicleList() throws Exception {
+	System.out.print("Testing WestminsterRentalVehicleManager.saveVehicleList()...");
+	Car c1 = new Car("TEST1", "Mercedes", "SUV", "silver");
+	Motorbike m1 = new Motorbike("TEST2", "BMW", "Moped", "black");
+	rvm.addVehicle(c1);
+	rvm.addVehicle(m1);
+	rvm.saveVehicleList();
+	File file = new File("vehicles.txt");
+	try {
+	    FileReader r = new FileReader(file);
+	    char[] vChars = new char[(int) file.length()];
+	    r.read(vChars);
+	    
+	    String fileContent = new String(vChars);
+	    String[] vehicles = fileContent.split("\n");
+	    String[] vehicleAttrs;
+	    for (int i = 0; i < vehicles.length; i++) {
+		vehicleAttrs = vehicles[i].split(",");
+		assertEquals(rvm.getVehiclesToRent().get(i).getVehicleType(), vehicleAttrs[0]);
+		assertEquals(rvm.getVehiclesToRent().get(i).getType(), vehicleAttrs[1]);
+		assertEquals(rvm.getVehiclesToRent().get(i).getMake(), vehicleAttrs[2]);
+		assertEquals(rvm.getVehiclesToRent().get(i).getPlateNumber(), vehicleAttrs[3]);
+		assertEquals(rvm.getVehiclesToRent().get(i).getColour(), vehicleAttrs[4]);
+	    }
+	} catch (IOException e) {
+	}
+	
+	System.out.print("PASSED");
+	System.out.println();
+    }
+
+    /**
+     * Test of checkAvailability method, of class WestminsterRentalVehicleManager.
+     */
+    @Test
+    public void testCheckAvailability() {
+	System.out.print("Testing WestminsterRentalVehicleManager.checkAvailability()...");
+	Car c1 = new Car("TEST", "Mercedes", "SUV", "silver");
+	rvm.addVehicle(c1);
+	Date start = new Date(13, 1, 2020);
+	Date end = new Date(14, 2, 2020);
+	boolean avail = rvm.checkAvailability("TEST", start, end);
+	assertTrue(avail);
+	rvm.getRentalSchedules().add(new Schedule(c1, new Date(7, 1, 2020), new Date(20, 1, 2020)));
+	avail = rvm.checkAvailability("TEST", start, end);
+	assertFalse(avail);
+	System.out.print("PASSED");
+	System.out.println();
+    }
+
+    /**
+     * Test of bookVehicle method, of class WestminsterRentalVehicleManager.
+     */
+    @Test
+    public void testBookVehicle() {
+	System.out.print("Testing WestminsterRentalVehicleManager.bookVehicle()...");
+	Car c1 = new Car("TEST", "Mercedes", "SUV", "silver");
+	rvm.addVehicle(c1);
+	Date pickUpDate = new Date(13, 1, 2020);
+	Date dropOffDate = new Date(22, 2, 2020);
+	boolean booked = rvm.bookVehicle(c1.getPlateNumber(), pickUpDate, dropOffDate);
+	assertTrue(booked);
+	assertEquals(1, rvm.getRentalSchedules().size());
+	assertEquals(c1, rvm.getRentalSchedules().get(0).getVehicle());
+	assertEquals(pickUpDate, rvm.getRentalSchedules().get(0).getPickUpDate());
+	assertEquals(dropOffDate, rvm.getRentalSchedules().get(0).getDropOffDate());
+	System.out.print("PASSED");
+	System.out.println();
+    }
 }

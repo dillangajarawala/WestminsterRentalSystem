@@ -1,1 +1,2 @@
-Car of type Sedan with plate HITHERE, make Honda, and colour red.Motorbike of type Dirt Bike with plate LOL, make Suzuki, and colour black.
+Car,SUV,Mercedes,TEST1,silver
+Motorbike,Moped,BMW,TEST2,black
