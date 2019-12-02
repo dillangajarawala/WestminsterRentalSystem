@@ -116,11 +116,11 @@ public class WestminsterRentalVehicleManager implements RentalVehicleManager {
     }
 
     @Override
-    public boolean bookVehicle(String plateNumber, Date pickUpDate, Date dropOffDate) {
+    public boolean bookVehicle(String plateNumber, Date pickUp, Date dropOff) {
 	boolean booked = false;
 	for (Vehicle v: vehiclesToRent) {
 	    if (v.getPlateNumber().equals(plateNumber)) {
-		rentalSchedules.add(new Schedule(v, pickUpDate, dropOffDate));
+		rentalSchedules.add(new Schedule(v, pickUp, dropOff));
 		booked = true;
 	    }
 	}

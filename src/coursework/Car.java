@@ -10,7 +10,6 @@ package coursework;
  * @author Dillan
  */
 public class Car extends Vehicle{
-    private String type;
 
     public Car(String plateNumber, String make) {
 	super(plateNumber, make);
