@@ -308,7 +308,10 @@ public class WestminsterRentalVehicleManager implements RentalVehicleManager {
 	    this.add(createTablePanel(list), BorderLayout.CENTER);
 	    this.add(createAvailabilityPanel(), BorderLayout.EAST);
 	}
-
+	
+	/* 
+	creates the panel on the left side, for list filtering
+	*/
 	public JPanel createFilterPanel() {
 	    JPanel filter = new JPanel();
 	    filter.setBackground(Color.BLUE);
@@ -341,6 +344,9 @@ public class WestminsterRentalVehicleManager implements RentalVehicleManager {
 	    return filter;
 	}
 
+	/* 
+	creates the panel in the middle, representing the vehicle list table
+	*/
 	public JPanel createTablePanel(ArrayList<Vehicle> list) {
 	    JPanel tbl = new JPanel();
 	    tbl.setBackground(Color.BLUE);
@@ -375,7 +381,10 @@ public class WestminsterRentalVehicleManager implements RentalVehicleManager {
 
 	    return tbl;
 	}
-
+	
+	/* 
+	creates the panel on the right side, for checking availability and booking
+	*/
 	public JPanel createAvailabilityPanel() {
 	    JPanel avail = new JPanel();
 	    avail.setBackground(Color.BLUE);

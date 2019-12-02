@@ -61,6 +61,9 @@ public class Date {
         return dayNum + "/" + monthNum + "/" + this.year;
     }
     
+    /* 
+    checks if the date object is within the range of two other dates
+    */
     public boolean withinRange(Date start, Date end) {
 	if (this.getDate().equals(start.getDate()) || this.greaterThan(start)) {
 	    if (this.getDate().equals(end.getDate()) || this.lessThan(end)) {
@@ -70,6 +73,9 @@ public class Date {
 	return false;
     }
     
+    /* 
+    checks if the date object is greater than another date
+    */
     public boolean greaterThan(Date comparison) {
 	if (year > comparison.getYear()) {
 	    return true;
@@ -81,6 +87,9 @@ public class Date {
 	return false;
     }
     
+    /* 
+    checks if the date object is less than another date
+    */
     public boolean lessThan(Date comparison) {
 	if (year < comparison.getYear()) {
 	    return true;
@@ -92,6 +101,9 @@ public class Date {
 	return false;
     }
     
+    /* 
+    checks if two pairs of dates overlap
+    */
     public static boolean overlap(Date start1, Date end1, Date start2, Date end2) {
 	if (start2.withinRange(start1, end1) || end2.withinRange(start1, end1)) {
 	    return true;
@@ -101,6 +113,9 @@ public class Date {
 	return false;
     }
     
+    /* 
+    checks if a day, month, and year could be a valid date
+    */
     public static boolean couldBeValid (int day, int month, int year) {
 	if (day < 1 || day > 31) {
 	    return false;
