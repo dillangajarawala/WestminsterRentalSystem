@@ -1,2 +1,0 @@
-Car,SUV,Mercedes,TEST1,silver
-Motorbike,Moped,BMW,TEST2,black
